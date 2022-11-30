@@ -17,33 +17,17 @@
             var operations = new Queue<Action<Stack<double>>>();
             foreach (var term in terms)
             {
-                switch (term)
+                operations.Enqueue(term switch
                 {
-                    case "+":
-                        operations.Enqueue(stack => stack.Push(stack.Pop() + stack.Pop()));
-                        break;
-                    case "-":
-                        operations.Enqueue(stack => stack.Push(stack.Pop() - stack.Pop()));
-                        break;
-                    case "*":
-                        operations.Enqueue(stack => stack.Push(stack.Pop() * stack.Pop()));
-                        break;
-                    case "/":
-                        operations.Enqueue(stack => stack.Push(stack.Pop() / stack.Pop()));
-                        break;
-                    case ")":
-                        operations.Enqueue(stack => { });
-                        break;
-                    case "(":
-                        operations.Enqueue(stack => { });
-                        break;
-                    default:
-                        var value = double.Parse(term);
-                        operations.Enqueue(stack => stack.Push(value));
-                        break;
-                }
-
-            }
+                    "+" => stack => stack.Push(stack.Pop() + stack.Pop()),
+                    "-" => stack => stack.Push(stack.Pop() - stack.Pop()),
+                    "*" => stack => stack.Push(stack.Pop() * stack.Pop()),
+                    "/" => stack => stack.Push(stack.Pop() / stack.Pop()),
+                    ")" => stack => { },
+                    "(" => stack => { },
+                    _ => stack => stack.Push(double.Parse(term))
+                });
+            };
             return operations;
         }
 
