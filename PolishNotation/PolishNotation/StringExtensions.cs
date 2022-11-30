@@ -4,7 +4,7 @@
     {
         public static double Evaluate(this string text)
         {
-            if (text == null || string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(text))
                 return default(double);
             var terms = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var operations = BuildExpressionStack(new Stack<string>(terms));
