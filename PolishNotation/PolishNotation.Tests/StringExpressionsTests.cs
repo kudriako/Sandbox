@@ -26,5 +26,15 @@ namespace PolishNotation.Tests
         {
             text.Evaluate().Should().BeApproximately(result, double.Epsilon);
         }
+
+        [Test]
+        [TestCase("+ 43.2 12.3", 55.5d)]
+        [TestCase("- 43.2 12.3", 30.9d)]
+        [TestCase("* 43.2 12.3", 531.36d)]
+        [TestCase("/ 43.2 12.3", 0.123d)]
+        public void Evaluate_WhenOperation_ReturnsResult(string text, double result)
+        {
+            text.Evaluate().Should().BeApproximately(result, double.Epsilon);
+        }
     }
 }
