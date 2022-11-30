@@ -31,6 +31,12 @@
                     case "/":
                         operations.Enqueue(stack => stack.Push(stack.Pop() / stack.Pop()));
                         break;
+                    case ")":
+                        operations.Enqueue(stack => { });
+                        break;
+                    case "(":
+                        operations.Enqueue(stack => { });
+                        break;
                     default:
                         var value = double.Parse(term);
                         operations.Enqueue(stack => stack.Push(value));

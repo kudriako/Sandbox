@@ -38,5 +38,14 @@ namespace PolishNotation.Tests
         {
             text.Evaluate().Should().BeApproximately(result, Epsilon);
         }
+
+        [Test]
+        [TestCase("* ( + 25 15 ) ( / 10 5 )", 80.0)]
+        [TestCase("+ ( + ( - 9 2 ) ( + 1 2 ) ) 2", 12.0)]
+        [TestCase("+ + - 9 2 + 1 2 2", 12.0)]
+        public void Evaluate_WhenParentheses_ReturnsResult(string text, double result)
+        {
+            text.Evaluate().Should().BeApproximately(result, Epsilon);
+        }
     }
 }
