@@ -11,9 +11,9 @@ namespace MonopolyFoundation.Tests
             var players = new[] { "Peter", "Ekaterina", "Alexander" };
             var expectedPlayers = new[]
             {
-                ("Peter",6000),
-                ("Ekaterina",6000),
-                ("Alexander",6000)
+                new Player("Peter",6000),
+                new Player("Ekaterina",6000),
+                new Player("Alexander",6000),
             };
             var monopoly = new Monopoly(players, 3);
 
@@ -49,11 +49,16 @@ namespace MonopolyFoundation.Tests
         {
             var players = new string[] { "Peter", "Ekaterina", "Alexander" };
             var monopoly = new Monopoly(players, 3);
-            var x = monopoly.GetFieldByName("Ford");
-            monopoly.Buy(1, x);
+
+            var cash = 6000;
+            var cost = 500;
+
+            
+            var field = monopoly.GetFieldByName("Ford");
+            monopoly.Buy(1, field);
 
             var actualPlayer = monopoly.GetPlayerInfo(1);
-            actualPlayer.Should().Be(("Peter", 5500));
+            actualPlayer.Should().Be(new Player("Peter", cash - cost));
 
             var actualField = monopoly.GetFieldByName("Ford");
             actualField.Item3.Should().Be(1);
@@ -63,17 +68,25 @@ namespace MonopolyFoundation.Tests
         public void RentaShouldBeCorrectTransferMoney()
         {
             var players = new string[] { "Peter", "Ekaterina", "Alexander" };
+            var buyerIndex = 1;
+            var ownerIndex = 2;
             var monopoly = new Monopoly(players, 3);
-            var x = monopoly.GetFieldByName("Ford");
-            monopoly.Buy(1, x);
-            x = monopoly.GetFieldByName("Ford");
-            monopoly.Renta(2, x);
 
-            var player1 = monopoly.GetPlayerInfo(1);
-            player1.Item2.Should().Be(5750);
+            var cash = 6000;
+            var cost = 500;
+            var renta = 250;
 
-            var player2 = monopoly.GetPlayerInfo(2);
-            player2.Item2.Should().Be(5750);
+            var field1 = monopoly.GetFieldByName("Ford");
+            monopoly.Buy(buyerIndex, field1);
+            
+            var field2 = monopoly.GetFieldByName("Ford");
+            monopoly.Renta(ownerIndex, field2);
+
+            var player1 = monopoly.GetPlayerInfo(buyerIndex);
+            player1.Cash.Should().Be(cash - cost + renta);
+
+            var player2 = monopoly.GetPlayerInfo(ownerIndex);
+            player2.Cash.Should().Be(cash - renta);
         }
     }
 }
