@@ -28,6 +28,32 @@
             return list;
         }
 
+        private static readonly Dictionary<FieldType, int> _fieldPrice = new Dictionary<FieldType, int>()
+        {
+            { FieldType.AUTO, 500 },
+            { FieldType.FOOD, 250 },
+            { FieldType.TRAVEL, 700 },
+            { FieldType.CLOTHER, 100 },
+        };
+
+        private static readonly Dictionary<FieldType, int> _fieldIncome = new Dictionary<FieldType, int>()
+        {
+            { FieldType.AUTO, 250 },
+            { FieldType.FOOD, 250 },
+            { FieldType.TRAVEL, 300 },
+            { FieldType.CLOTHER, 1000 },
+        };
+
+        private static readonly Dictionary<FieldType, int> _fieldRenta = new Dictionary<FieldType, int>()
+        {
+            { FieldType.AUTO, 250 },
+            { FieldType.FOOD, 250 },
+            { FieldType.TRAVEL, 300 },
+            { FieldType.CLOTHER, 100 },
+            { FieldType.PRISON, 1000 },
+            { FieldType.BANK, 700 },
+        };
+
         private readonly List<Player> _players = new List<Player>();
 
         private readonly List<Field> _fields = new List<Field>();
@@ -49,8 +75,10 @@
             return _players;
         }
 
-        public Player GetPlayerInfo(int playerIndex)
+        public Player? GetPlayerInfo(int playerIndex)
         {
+            if (playerIndex < 1 || playerIndex > _players.Count)
+                return null;
             return _players[playerIndex - 1];
         }
 
@@ -63,80 +91,44 @@
 
         public bool Buy(int playerIndex, Field field)
         {
+            var player = GetPlayerInfo(playerIndex);
+            if (player == null)
+                throw new ArgumentException("Invalid player index.");
+
             if (field.OwnerIndex != 0)
                 return false;
-            var player = GetPlayerInfo(playerIndex);
-            switch (field.FieldType)
+            
+
+            if (_fieldPrice.TryGetValue(field.FieldType, out int cost))
             {
-                case FieldType.AUTO:
-                    player.Cash -= 500;
-                    break;
-
-                case FieldType.FOOD:
-                    player.Cash -= 250;
-                    break;
-
-                case FieldType.TRAVEL:
-                    player.Cash -= 700;
-                    break;
-
-                case FieldType.CLOTHER:
-                    player.Cash -= 100;
-                    break;
-
-                default:
-                    return false;
+                field.OwnerIndex = playerIndex;
+                player.Cash -= cost;
+                return true;
             }
-            field.OwnerIndex = playerIndex;
-            return true;
+            return false;
         }
 
         public bool Renta(int playerIndex, Field field)
         {
             var player = GetPlayerInfo(playerIndex);
+            if (player == null)
+                throw new ArgumentException("Invalid player index.");
+            if (field == null)
+                throw new ArgumentNullException(nameof(field), "Field does not set.");
             Player? owner = GetPlayerInfo(field.OwnerIndex);
-            switch (field.FieldType)
+
+            if (_fieldIncome.TryGetValue(field.FieldType, out int income) && owner != null)
             {
-                case FieldType.AUTO:
-                    if (owner == null)
-                        return false;
-                    player.Cash -= 250;
-                    owner.Cash += 250;
-                    break;
-
-                case FieldType.FOOD:
-                    if (owner == null)
-                        return false;
-                    player.Cash -= 250;
-                    owner.Cash += 250;
-                    break;
-
-                case FieldType.TRAVEL:
-                    if (owner == null)
-                        return false;
-                    player.Cash -= 300;
-                    owner.Cash += 300;
-                    break;
-
-                case FieldType.CLOTHER:
-                    if (owner == null)
-                        return false;
-                    player.Cash -= 100;
-                    owner.Cash += 1000;
-                    break;
-
-                case FieldType.PRISON:
-                    player.Cash -= 1000;
-                    break;
-
-                case FieldType.BANK:
-                    player.Cash -= 700;
-                    break;
-
-                default:
-                    return false;
+                owner.Cash += income;
             }
-            return true;
+
+            if (_fieldRenta.TryGetValue(field.FieldType, out int renta))
+            {
+                player.Cash -= renta;
+            }
+ 
+            var result = owner != null && income > 0;
+            return result;
         }
     }
 }
