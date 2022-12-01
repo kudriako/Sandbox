@@ -6,7 +6,7 @@ namespace MonopolyFoundation
     public class Monopoly
     {
         public List<(string, int)> players = new List<(string, int)>();
-        public List<(string, Monopoly.Type, int, bool)> fields = new List<(string, Type, int, bool)>();
+        public List<(string, FieldType, int, bool)> fields = new List<(string, FieldType, int, bool)>();
 
         public Monopoly(string[] p, int v)
         {
@@ -14,14 +14,14 @@ namespace MonopolyFoundation
             {
                 players.Add((p[i], 6000));
             }
-            fields.Add(("Ford", Monopoly.Type.AUTO, 0, false));
-            fields.Add(("MCDonald", Monopoly.Type.FOOD, 0, false));
-            fields.Add(("Lamoda", Monopoly.Type.CLOTHER, 0, false));
-            fields.Add(("Air Baltic", Monopoly.Type.TRAVEL, 0, false));
-            fields.Add(("Nordavia", Monopoly.Type.TRAVEL, 0, false));
-            fields.Add(("Prison", Monopoly.Type.PRISON, 0, false));
-            fields.Add(("MCDonald", Monopoly.Type.FOOD, 0, false));
-            fields.Add(("TESLA", Monopoly.Type.AUTO, 0, false));
+            fields.Add(("Ford", FieldType.AUTO, 0, false));
+            fields.Add(("MCDonald", FieldType.FOOD, 0, false));
+            fields.Add(("Lamoda", FieldType.CLOTHER, 0, false));
+            fields.Add(("Air Baltic", FieldType.TRAVEL, 0, false));
+            fields.Add(("Nordavia", FieldType.TRAVEL, 0, false));
+            fields.Add(("Prison", FieldType.PRISON, 0, false));
+            fields.Add(("MCDonald", FieldType.FOOD, 0, false));
+            fields.Add(("TESLA", FieldType.AUTO, 0, false));
         }
 
         public List<(string, int)> GetPlayersList()
@@ -29,51 +29,43 @@ namespace MonopolyFoundation
             return players;
         }
 
-        public enum Type
-        {
-            AUTO,
-            FOOD,
-            CLOTHER,
-            TRAVEL,
-            PRISON,
-            BANK
-        }
+        
 
-        public List<(string, Monopoly.Type, int, bool)> GetFieldsList()
+        public List<(string, FieldType, int, bool)> GetFieldsList()
         {
             return fields;
         }
 
-        public (string, Type, int, bool) GetFieldByName(string v)
+        public (string, FieldType, int, bool) GetFieldByName(string v)
         {
             return (from p in fields where p.Item1 == v select p).FirstOrDefault();
         }
 
-        public bool Buy(int v, (string, Type, int, bool) k)
+        public bool Buy(int v, (string, FieldType, int, bool) k)
         {
             var x = GetPlayerInfo(v);
             int cash = 0;
             switch (k.Item2)
             {
-                case Type.AUTO:
+                case FieldType.AUTO:
                     if (k.Item3 != 0)
                         return false;
                     cash = x.Item2 - 500;
                     players[v - 1] = (x.Item1, cash);
                     break;
-                case Type.FOOD:
+                case FieldType.FOOD:
                     if (k.Item3 != 0)
                         return false;
                     cash = x.Item2 - 250;
                     players[v - 1] = (x.Item1, cash);
                     break;
-                case Type.TRAVEL:
+                case FieldType.TRAVEL:
                     if (k.Item3 != 0)
                         return false;
                     cash = x.Item2 - 700;
                     players[v - 1] = (x.Item1, cash);
                     break;
-                case Type.CLOTHER:
+                case FieldType.CLOTHER:
                     if (k.Item3 != 0)
                         return false;
                     cash = x.Item2 - 100;
@@ -94,20 +86,20 @@ namespace MonopolyFoundation
             return players[v - 1];
         }
 
-        public bool Renta(int v, (string, Type, int, bool) k)
+        public bool Renta(int v, (string, FieldType, int, bool) k)
         {
             var z = GetPlayerInfo(v);
             (string, int) o = default;
             switch (k.Item2)
             {
-                case Type.AUTO:
+                case FieldType.AUTO:
                     if (k.Item3 == 0)
                         return false;
                     o = GetPlayerInfo(k.Item3);
                     z = (z.Item1, z.Item2 - 250);
                     o = (o.Item1, o.Item2 + 250);
                     break;
-                case Type.FOOD:
+                case FieldType.FOOD:
                     if (k.Item3 == 0)
                         return false;
                     o = GetPlayerInfo(k.Item3);
@@ -115,14 +107,14 @@ namespace MonopolyFoundation
                     o = (o.Item1, o.Item2 + 250);
 
                     break;
-                case Type.TRAVEL:
+                case FieldType.TRAVEL:
                     if (k.Item3 == 0)
                         return false;
                     o = GetPlayerInfo(k.Item3);
                     z = (z.Item1, z.Item2 - 300);
                     o = (o.Item1, o.Item2 + 300);
                     break;
-                case Type.CLOTHER:
+                case FieldType.CLOTHER:
                     if (k.Item3 == 0)
                         return false;
                     o = GetPlayerInfo(k.Item3);
@@ -130,10 +122,10 @@ namespace MonopolyFoundation
                     o = (o.Item1, o.Item2 + 1000);
 
                     break;
-                case Type.PRISON:
+                case FieldType.PRISON:
                     z = (z.Item1, z.Item2 - 1000);
                     break;
-                case Type.BANK:
+                case FieldType.BANK:
                     z = (z.Item1, z.Item2 - 700);
                     break;
                 default:

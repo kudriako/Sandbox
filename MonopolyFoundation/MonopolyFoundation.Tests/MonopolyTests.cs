@@ -27,14 +27,14 @@ namespace MonopolyFoundation.Tests
         {
             var expectedCompanies = new[]
             {
-                ("Ford",Monopoly.Type.AUTO,0,false),
-                ("MCDonald", Monopoly.Type.FOOD, 0, false),
-                ("Lamoda", Monopoly.Type.CLOTHER, 0, false),
-                ("Air Baltic",Monopoly.Type.TRAVEL,0,false),
-                ("Nordavia",Monopoly.Type.TRAVEL,0,false),
-                ("Prison",Monopoly.Type.PRISON,0,false),
-                ("MCDonald",Monopoly.Type.FOOD,0,false),
-                ("TESLA",Monopoly.Type.AUTO,0,false)
+                ("Ford", FieldType.AUTO, 0, false),
+                ("MCDonald", FieldType.FOOD, 0, false),
+                ("Lamoda", FieldType.CLOTHER, 0, false),
+                ("Air Baltic", FieldType.TRAVEL, 0, false),
+                ("Nordavia", FieldType.TRAVEL, 0, false),
+                ("Prison", FieldType.PRISON, 0, false),
+                ("MCDonald", FieldType.FOOD, 0, false),
+                ("TESLA", FieldType.AUTO, 0, false),
             };
             var players = new string[] { "Peter", "Ekaterina", "Alexander" };
             var monopoly = new Monopoly(players, 3);
