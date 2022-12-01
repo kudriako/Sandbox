@@ -1,5 +1,8 @@
+using System;
+
 using FluentAssertions;
 using NUnit.Framework;
+
 
 namespace MonopolyFoundation.Tests
 {
@@ -11,9 +14,9 @@ namespace MonopolyFoundation.Tests
             var players = new[] { "Peter", "Ekaterina", "Alexander" };
             var expectedPlayers = new[]
             {
-                new Player("Peter",6000),
-                new Player("Ekaterina",6000),
-                new Player("Alexander",6000),
+                new Player("Peter", Monopoly.StartingCash),
+                new Player("Ekaterina", Monopoly.StartingCash),
+                new Player("Alexander", Monopoly.StartingCash),
             };
             var monopoly = new Monopoly(players, 3);
 
@@ -72,7 +75,7 @@ namespace MonopolyFoundation.Tests
             var ownerIndex = 2;
             var monopoly = new Monopoly(players, 3);
 
-            var cash = 6000;
+            var cash = Monopoly.StartingCash;
             var cost = 500;
             var renta = 250;
 
