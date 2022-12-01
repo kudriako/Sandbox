@@ -27,14 +27,14 @@ namespace MonopolyFoundation.Tests
         {
             var expectedCompanies = new[]
             {
-                ("Ford", FieldType.AUTO, 0, false),
-                ("MCDonald", FieldType.FOOD, 0, false),
-                ("Lamoda", FieldType.CLOTHER, 0, false),
-                ("Air Baltic", FieldType.TRAVEL, 0, false),
-                ("Nordavia", FieldType.TRAVEL, 0, false),
-                ("Prison", FieldType.PRISON, 0, false),
-                ("MCDonald", FieldType.FOOD, 0, false),
-                ("TESLA", FieldType.AUTO, 0, false),
+                new Field("Ford", FieldType.AUTO, 0, false),
+                new Field("MCDonald", FieldType.FOOD, 0, false),
+                new Field("Lamoda", FieldType.CLOTHER, 0, false),
+                new Field("Air Baltic", FieldType.TRAVEL, 0, false),
+                new Field("Nordavia", FieldType.TRAVEL, 0, false),
+                new Field("Prison", FieldType.PRISON, 0, false),
+                new Field("MCDonald", FieldType.FOOD, 0, false),
+                new Field("TESLA", FieldType.AUTO, 0, false),
             };
             var players = new string[] { "Peter", "Ekaterina", "Alexander" };
             var monopoly = new Monopoly(players, 3);
@@ -61,7 +61,7 @@ namespace MonopolyFoundation.Tests
             actualPlayer.Should().Be(new Player("Peter", cash - cost));
 
             var actualField = monopoly.GetFieldByName("Ford");
-            actualField.Item3.Should().Be(1);
+            actualField.OwnerIndex.Should().Be(1);
         }
 
         [Test]
