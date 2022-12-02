@@ -17,14 +17,14 @@
         public static List<Field> CreateFieldsList()
         {
             var list = new List<Field>();
-            list.Add(new Field("Ford", FieldType.AUTO, 0, false));
-            list.Add(new Field("MCDonald", FieldType.FOOD, 0, false));
-            list.Add(new Field("Lamoda", FieldType.CLOTHER, 0, false));
-            list.Add(new Field("Air Baltic", FieldType.TRAVEL, 0, false));
-            list.Add(new Field("Nordavia", FieldType.TRAVEL, 0, false));
-            list.Add(new Field("Prison", FieldType.PRISON, 0, false));
-            list.Add(new Field("MCDonald", FieldType.FOOD, 0, false));
-            list.Add(new Field("TESLA", FieldType.AUTO, 0, false));
+            list.Add(new Field("Ford", FieldType.AUTO, 0));
+            list.Add(new Field("MCDonald", FieldType.FOOD, 0));
+            list.Add(new Field("Lamoda", FieldType.CLOTHER, 0));
+            list.Add(new Field("Air Baltic", FieldType.TRAVEL, 0));
+            list.Add(new Field("Nordavia", FieldType.TRAVEL, 0));
+            list.Add(new Field("Prison", FieldType.PRISON, 0));
+            list.Add(new Field("MCDonald", FieldType.FOOD, 0));
+            list.Add(new Field("TESLA", FieldType.AUTO, 0));
             return list;
         }
 
