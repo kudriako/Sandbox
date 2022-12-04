@@ -28,32 +28,6 @@
             return list;
         }
 
-        private static readonly Dictionary<FieldType, int> _fieldPrice = new Dictionary<FieldType, int>()
-        {
-            { FieldType.AUTO, 500 },
-            { FieldType.FOOD, 250 },
-            { FieldType.TRAVEL, 700 },
-            { FieldType.CLOTHER, 100 },
-        };
-
-        private static readonly Dictionary<FieldType, int> _fieldIncome = new Dictionary<FieldType, int>()
-        {
-            { FieldType.AUTO, 250 },
-            { FieldType.FOOD, 250 },
-            { FieldType.TRAVEL, 300 },
-            { FieldType.CLOTHER, 1000 },
-        };
-
-        private static readonly Dictionary<FieldType, int> _fieldRenta = new Dictionary<FieldType, int>()
-        {
-            { FieldType.AUTO, 250 },
-            { FieldType.FOOD, 250 },
-            { FieldType.TRAVEL, 300 },
-            { FieldType.CLOTHER, 100 },
-            { FieldType.PRISON, 1000 },
-            { FieldType.BANK, 700 },
-        };
-
         private readonly List<Player> _players = new List<Player>();
 
         private readonly List<Field> _fields = new List<Field>();
@@ -95,13 +69,10 @@
             if (player == null)
                 throw new ArgumentException("Invalid player index.");
 
-            if (field.HasOwner())
-                return false;
-
-            if (_fieldPrice.TryGetValue(field.FieldType, out int cost))
+            if (field.CanBeBought())
             {
                 field.SetOwner(player);
-                player.Cash -= cost;
+                player.Cash -= field.Price;
                 return true;
             }
             return false;
@@ -115,17 +86,14 @@
             if (field == null)
                 throw new ArgumentNullException(nameof(field), "Field does not set.");
 
-            if (_fieldIncome.TryGetValue(field.FieldType, out int income) && field.HasOwner())
+            if (field.HasOwner())
             {
-                field.Owner.Cash += income;
+                field.Owner.Cash += field.Income;
             }
 
-            if (_fieldRenta.TryGetValue(field.FieldType, out int renta))
-            {
-                player.Cash -= renta;
-            }
+            player.Cash -= field.Renta;
  
-            var result = field.HasOwner() && income > 0;
+            var result = field.HasOwner();
             return result;
         }
     }
