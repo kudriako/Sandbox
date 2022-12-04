@@ -17,14 +17,14 @@
         public static List<Field> CreateFieldsList()
         {
             var list = new List<Field>();
-            list.Add(new Field("Ford", FieldType.AUTO, 0));
-            list.Add(new Field("MCDonald", FieldType.FOOD, 0));
-            list.Add(new Field("Lamoda", FieldType.CLOTHER, 0));
-            list.Add(new Field("Air Baltic", FieldType.TRAVEL, 0));
-            list.Add(new Field("Nordavia", FieldType.TRAVEL, 0));
-            list.Add(new Field("Prison", FieldType.PRISON, 0));
-            list.Add(new Field("MCDonald", FieldType.FOOD, 0));
-            list.Add(new Field("TESLA", FieldType.AUTO, 0));
+            list.Add(new Field("Ford", FieldType.AUTO));
+            list.Add(new Field("MCDonald", FieldType.FOOD));
+            list.Add(new Field("Lamoda", FieldType.CLOTHER));
+            list.Add(new Field("Air Baltic", FieldType.TRAVEL));
+            list.Add(new Field("Nordavia", FieldType.TRAVEL));
+            list.Add(new Field("Prison", FieldType.PRISON));
+            list.Add(new Field("MCDonald", FieldType.FOOD));
+            list.Add(new Field("TESLA", FieldType.AUTO));
             return list;
         }
 
@@ -95,13 +95,12 @@
             if (player == null)
                 throw new ArgumentException("Invalid player index.");
 
-            if (field.OwnerIndex != 0)
+            if (field.HasOwner())
                 return false;
-            
 
             if (_fieldPrice.TryGetValue(field.FieldType, out int cost))
             {
-                field.OwnerIndex = playerIndex;
+                field.SetOwner(player);
                 player.Cash -= cost;
                 return true;
             }
@@ -115,11 +114,10 @@
                 throw new ArgumentException("Invalid player index.");
             if (field == null)
                 throw new ArgumentNullException(nameof(field), "Field does not set.");
-            Player? owner = GetPlayerInfo(field.OwnerIndex);
 
-            if (_fieldIncome.TryGetValue(field.FieldType, out int income) && owner != null)
+            if (_fieldIncome.TryGetValue(field.FieldType, out int income) && field.HasOwner())
             {
-                owner.Cash += income;
+                field.Owner.Cash += income;
             }
 
             if (_fieldRenta.TryGetValue(field.FieldType, out int renta))
@@ -127,7 +125,7 @@
                 player.Cash -= renta;
             }
  
-            var result = owner != null && income > 0;
+            var result = field.HasOwner() && income > 0;
             return result;
         }
     }
