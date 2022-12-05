@@ -1,4 +1,6 @@
-﻿namespace MonopolyFoundation
+﻿using MonopolyFoundation.Fields;
+
+namespace MonopolyFoundation
 {
     public class Monopoly
     {
@@ -14,23 +16,23 @@
             return list;
         }
 
-        public static List<Field> CreateFieldsList()
+        public static List<FieldBase> CreateFieldsList()
         {
-            var list = new List<Field>();
-            list.Add(new Field("Ford", FieldType.AUTO));
-            list.Add(new Field("MCDonald", FieldType.FOOD));
-            list.Add(new Field("Lamoda", FieldType.CLOTHER));
-            list.Add(new Field("Air Baltic", FieldType.TRAVEL));
-            list.Add(new Field("Nordavia", FieldType.TRAVEL));
-            list.Add(new Field("Prison", FieldType.PRISON));
-            list.Add(new Field("MCDonald", FieldType.FOOD));
-            list.Add(new Field("TESLA", FieldType.AUTO));
+            var list = new List<FieldBase>();
+            list.Add(new CommercialField("Ford", FieldType.AUTO));
+            list.Add(new CommercialField("MCDonald", FieldType.FOOD));
+            list.Add(new CommercialField("Lamoda", FieldType.CLOTHER));
+            list.Add(new CommercialField("Air Baltic", FieldType.TRAVEL));
+            list.Add(new CommercialField("Nordavia", FieldType.TRAVEL));
+            list.Add(new MunicipalField("Prison", FieldType.PRISON));
+            list.Add(new CommercialField("MCDonald", FieldType.FOOD));
+            list.Add(new CommercialField("TESLA", FieldType.AUTO));
             return list;
         }
 
-        private readonly List<Player> _players = new List<Player>();
+        private readonly List<Player> _players = new();
 
-        private readonly List<Field> _fields = new List<Field>();
+        private readonly List<FieldBase> _fields = new();
 
         public Monopoly(string[] playerNames, int playersNumber)
         {
@@ -44,28 +46,17 @@
             _fields = CreateFieldsList();
         }
 
-        public List<Player> GetPlayersList()
-        {
-            return _players;
-        }
+        public IReadOnlyCollection<Player> Players => _players;
 
-        public Player? GetPlayerInfo(int playerIndex)
-        {
-            if (playerIndex < 1 || playerIndex > _players.Count)
-                return null;
-            return _players[playerIndex - 1];
-        }
+        public Player? GetPlayerByIndex(int index) => _players.ElementAtOrDefault(index - 1);
 
-        public List<Field> GetFieldsList()
-        {
-            return _fields;
-        }
+        public IReadOnlyCollection<FieldBase> Fields => _fields;
 
-        public Field GetFieldByName(string fieldName) => (from p in _fields where p.Name == fieldName select p).FirstOrDefault();
+        public FieldBase? GetFieldByName(string name) => _fields.FirstOrDefault(f => f.Name == name);
 
-        public bool Buy(int playerIndex, Field field)
+        public bool Buy(int playerIndex, FieldBase field)
         {
-            var player = GetPlayerInfo(playerIndex);
+            var player = GetPlayerByIndex(playerIndex);
             if (player == null)
                 throw new ArgumentException("Invalid player index.");
 
@@ -78,9 +69,9 @@
             return false;
         }
 
-        public bool Renta(int playerIndex, Field field)
+        public bool Renta(int playerIndex, FieldBase field)
         {
-            var player = GetPlayerInfo(playerIndex);
+            var player = GetPlayerByIndex(playerIndex);
             if (player == null)
                 throw new ArgumentException("Invalid player index.");
             if (field == null)

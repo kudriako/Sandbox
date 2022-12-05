@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
 
-namespace MonopolyFoundation
+namespace MonopolyFoundation.Fields
 {
-    public record Field
+    public abstract record FieldBase
     {
         private static readonly Dictionary<FieldType, int> _fieldPrice = new Dictionary<FieldType, int>()
         {
@@ -34,7 +34,7 @@ namespace MonopolyFoundation
             { FieldType.BANK, 700 },
         };
 
-        public Field(string name, FieldType type)
+        public FieldBase(string name, FieldType type)
         {
             Name = name;
             FieldType = type;
@@ -54,13 +54,13 @@ namespace MonopolyFoundation
 
         public int Renta { get; init; }
 
-        public bool CanBeBought() => Price > 0 && !HasOwner();
+        public abstract bool CanBeBought();
 
         public Player Owner { get; private set; } = default!;
 
         public bool HasOwner() => Owner != null;
 
-        public Field SetOwner(Player player)
+        public FieldBase SetOwner(Player player)
         {
             if (player == null)
                 throw new ArgumentNullException(nameof(player));

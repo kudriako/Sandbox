@@ -1,13 +1,29 @@
 using FluentAssertions;
 using NUnit.Framework;
 
+using MonopolyFoundation.Fields;
 
 namespace MonopolyFoundation.Tests
 {
     public class MonopolyTests
     {
         [Test]
-        public void GetPlayersListReturnCorrectList()
+        public void Players_ReturnsSameReadOnlyList()
+        {
+            var monopoly = new Monopoly(new[] { "Peter", "Ekaterina", "Alexander" }, 3);
+            monopoly.Players.Should().BeSameAs(monopoly.Players);
+        }
+
+        [Test]
+        public void Fields_ReturnsSameReadOnlyList()
+        {
+            var monopoly = new Monopoly(new[] { "Peter", "Ekaterina", "Alexander" }, 3);
+            monopoly.Fields.Should().BeSameAs(monopoly.Fields);
+        }
+
+
+        [Test]
+        public void GetPlayersListReturnsCorrectList()
         {
             var players = new[] { "Peter", "Ekaterina", "Alexander" };
             var expectedPlayers = new[]
@@ -18,7 +34,7 @@ namespace MonopolyFoundation.Tests
             };
             var monopoly = new Monopoly(players, 3);
 
-            var actualPlayers = monopoly.GetPlayersList().ToArray();
+            var actualPlayers = monopoly.Players;
 
             actualPlayers.Should().Equal(expectedPlayers);
         }
@@ -26,21 +42,21 @@ namespace MonopolyFoundation.Tests
         [Test]
         public void GetFieldsListReturnCorrectList()
         {
-            var expectedCompanies = new[]
+            var expectedCompanies = new FieldBase[]
             {
-                new Field("Ford", FieldType.AUTO),
-                new Field("MCDonald", FieldType.FOOD),
-                new Field("Lamoda", FieldType.CLOTHER),
-                new Field("Air Baltic", FieldType.TRAVEL),
-                new Field("Nordavia", FieldType.TRAVEL),
-                new Field("Prison", FieldType.PRISON),
-                new Field("MCDonald", FieldType.FOOD),
-                new Field("TESLA", FieldType.AUTO),
+                new CommercialField("Ford", FieldType.AUTO),
+                new CommercialField("MCDonald", FieldType.FOOD),
+                new CommercialField("Lamoda", FieldType.CLOTHER),
+                new CommercialField("Air Baltic", FieldType.TRAVEL),
+                new CommercialField("Nordavia", FieldType.TRAVEL),
+                new MunicipalField("Prison", FieldType.PRISON),
+                new CommercialField("MCDonald", FieldType.FOOD),
+                new CommercialField("TESLA", FieldType.AUTO),
             };
             var players = new string[] { "Peter", "Ekaterina", "Alexander" };
             var monopoly = new Monopoly(players, 3);
 
-            var actualCompanies = monopoly.GetFieldsList().ToArray();
+            var actualCompanies = monopoly.Fields;
 
             actualCompanies.Should().Equal(expectedCompanies);
         }
@@ -58,7 +74,7 @@ namespace MonopolyFoundation.Tests
             var field = monopoly.GetFieldByName("Ford");
             monopoly.Buy(1, field);
 
-            var actualPlayer = monopoly.GetPlayerInfo(1);
+            var actualPlayer = monopoly.GetPlayerByIndex(1);
             actualPlayer.Should().Be(new Player("Peter", cash - cost));
 
             var actualField = monopoly.GetFieldByName("Ford");
@@ -83,10 +99,10 @@ namespace MonopolyFoundation.Tests
             var field2 = monopoly.GetFieldByName("Ford");
             monopoly.Renta(ownerIndex, field2);
 
-            var player1 = monopoly.GetPlayerInfo(buyerIndex);
+            var player1 = monopoly.GetPlayerByIndex(buyerIndex);
             player1.Cash.Should().Be(cash - cost + renta);
 
-            var player2 = monopoly.GetPlayerInfo(ownerIndex);
+            var player2 = monopoly.GetPlayerByIndex(ownerIndex);
             player2.Cash.Should().Be(cash - renta);
         }
     }
