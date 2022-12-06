@@ -44,14 +44,14 @@ namespace MonopolyFoundation.Tests
         {
             var expectedCompanies = new FieldBase[]
             {
-                new CommercialField("Ford", FieldType.AUTO),
-                new CommercialField("MCDonald", FieldType.FOOD),
-                new CommercialField("Lamoda", FieldType.CLOTHER),
-                new CommercialField("Air Baltic", FieldType.TRAVEL),
-                new CommercialField("Nordavia", FieldType.TRAVEL),
-                new MunicipalField("Prison", FieldType.PRISON),
-                new CommercialField("MCDonald", FieldType.FOOD),
-                new CommercialField("TESLA", FieldType.AUTO),
+                new CommercialField("Ford", FieldType.AUTO) { Price = 500, Income = 250, Renta = 250 },
+                new CommercialField("MCDonald", FieldType.FOOD) { Price = 250, Income = 250, Renta = 250 },
+                new CommercialField("Lamoda", FieldType.CLOTHER) { Price = 100, Income = 1000, Renta = 100 },
+                new CommercialField("Air Baltic", FieldType.TRAVEL) { Price = 700, Income = 300, Renta = 300 },
+                new CommercialField("Nordavia", FieldType.TRAVEL) { Price = 700, Income = 300, Renta = 300 },
+                new MunicipalField("Prison", FieldType.PRISON) { Renta = 1000 },
+                new CommercialField("MCDonald", FieldType.FOOD) { Price = 250, Income = 250, Renta = 250 },
+                new CommercialField("TESLA", FieldType.AUTO) { Price = 500, Income = 250, Renta = 250 },
             };
             var players = new string[] { "Peter", "Ekaterina", "Alexander" };
             var monopoly = new Monopoly(players, 3);

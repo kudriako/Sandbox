@@ -18,15 +18,16 @@ namespace MonopolyFoundation
 
         public static List<FieldBase> CreateFieldsList()
         {
+            var factory = new FieldFactory();
             var list = new List<FieldBase>();
-            list.Add(new CommercialField("Ford", FieldType.AUTO));
-            list.Add(new CommercialField("MCDonald", FieldType.FOOD));
-            list.Add(new CommercialField("Lamoda", FieldType.CLOTHER));
-            list.Add(new CommercialField("Air Baltic", FieldType.TRAVEL));
-            list.Add(new CommercialField("Nordavia", FieldType.TRAVEL));
-            list.Add(new MunicipalField("Prison", FieldType.PRISON));
-            list.Add(new CommercialField("MCDonald", FieldType.FOOD));
-            list.Add(new CommercialField("TESLA", FieldType.AUTO));
+            list.Add(factory.CreateField("Ford", FieldType.AUTO));
+            list.Add(factory.CreateField("MCDonald", FieldType.FOOD));
+            list.Add(factory.CreateField("Lamoda", FieldType.CLOTHER));
+            list.Add(factory.CreateField("Air Baltic", FieldType.TRAVEL));
+            list.Add(factory.CreateField("Nordavia", FieldType.TRAVEL));
+            list.Add(factory.CreateField("Prison", FieldType.PRISON));
+            list.Add(factory.CreateField("MCDonald", FieldType.FOOD));
+            list.Add(factory.CreateField("TESLA", FieldType.AUTO));
             return list;
         }
 
