@@ -10,14 +10,14 @@ namespace MonopolyFoundation.Tests
         [Test]
         public void Players_ReturnsSameReadOnlyList()
         {
-            var monopoly = new Monopoly(new[] { "Peter", "Ekaterina", "Alexander" }, 3);
+            var monopoly = new Monopoly().SetUpPlayers(new [] { "Peter", "Ekaterina", "Alexander" });
             monopoly.Players.Should().BeSameAs(monopoly.Players);
         }
 
         [Test]
         public void Fields_ReturnsSameReadOnlyList()
         {
-            var monopoly = new Monopoly(new[] { "Peter", "Ekaterina", "Alexander" }, 3);
+            var monopoly = new Monopoly().SetUpPlayers(new[] { "Peter", "Ekaterina", "Alexander" });
             monopoly.Fields.Should().BeSameAs(monopoly.Fields);
         }
 
@@ -25,14 +25,14 @@ namespace MonopolyFoundation.Tests
         [Test]
         public void GetPlayersListReturnsCorrectList()
         {
-            var players = new[] { "Peter", "Ekaterina", "Alexander" };
+            var cash = 4200;
             var expectedPlayers = new[]
             {
-                new Player("Peter", Monopoly.StartingCash),
-                new Player("Ekaterina", Monopoly.StartingCash),
-                new Player("Alexander", Monopoly.StartingCash),
+                new Player("Peter", cash),
+                new Player("Ekaterina", cash),
+                new Player("Alexander", cash),
             };
-            var monopoly = new Monopoly(players, 3);
+            var monopoly = new Monopoly().SetUpPlayers(new[] { "Peter", "Ekaterina", "Alexander" }, cash);
 
             var actualPlayers = monopoly.Players;
 
@@ -44,17 +44,16 @@ namespace MonopolyFoundation.Tests
         {
             var expectedCompanies = new FieldBase[]
             {
-                new CommercialField("Ford", FieldType.AUTO) { Price = 500, Income = 250, Renta = 250 },
-                new CommercialField("MCDonald", FieldType.FOOD) { Price = 250, Income = 250, Renta = 250 },
-                new CommercialField("Lamoda", FieldType.CLOTHER) { Price = 100, Income = 1000, Renta = 100 },
-                new CommercialField("Air Baltic", FieldType.TRAVEL) { Price = 700, Income = 300, Renta = 300 },
-                new CommercialField("Nordavia", FieldType.TRAVEL) { Price = 700, Income = 300, Renta = 300 },
-                new MunicipalField("Prison", FieldType.PRISON) { Renta = 1000 },
-                new CommercialField("MCDonald", FieldType.FOOD) { Price = 250, Income = 250, Renta = 250 },
-                new CommercialField("TESLA", FieldType.AUTO) { Price = 500, Income = 250, Renta = 250 },
+                new CommercialField("Ford", FieldType.AUTO) { Price = 500, Income = 250, Charge = 250 },
+                new CommercialField("MCDonald", FieldType.FOOD) { Price = 250, Income = 250, Charge = 250 },
+                new CommercialField("Lamoda", FieldType.CLOTHER) { Price = 100, Income = 1000, Charge = 100 },
+                new CommercialField("Air Baltic", FieldType.TRAVEL) { Price = 700, Income = 300, Charge = 300 },
+                new CommercialField("Nordavia", FieldType.TRAVEL) { Price = 700, Income = 300, Charge = 300 },
+                new MunicipalField("Prison", FieldType.PRISON) { Charge = 1000 },
+                new CommercialField("MCDonald", FieldType.FOOD) { Price = 250, Income = 250, Charge = 250 },
+                new CommercialField("TESLA", FieldType.AUTO) { Price = 500, Income = 250, Charge = 250 },
             };
-            var players = new string[] { "Peter", "Ekaterina", "Alexander" };
-            var monopoly = new Monopoly(players, 3);
+            var monopoly = new Monopoly().SetUpFields();
 
             var actualCompanies = monopoly.Fields;
 
@@ -64,10 +63,9 @@ namespace MonopolyFoundation.Tests
         [Test]
         public void PlayerBuyNoOwnedCompanies()
         {
-            var players = new string[] { "Peter", "Ekaterina", "Alexander" };
-            var monopoly = new Monopoly(players, 3);
+            var cash = 5000;
+            var monopoly = new Monopoly().SetUpFields().SetUpPlayers(new [] { "Peter", "Ekaterina", "Alexander" }, cash);
 
-            var cash = 6000;
             var cost = 500;
 
             
@@ -84,25 +82,24 @@ namespace MonopolyFoundation.Tests
         [Test]
         public void RentaShouldBeCorrectTransferMoney()
         {
-            var players = new string[] { "Peter", "Ekaterina", "Alexander" };
-            var buyerIndex = 1;
-            var ownerIndex = 2;
-            var monopoly = new Monopoly(players, 3);
-
-            var cash = Monopoly.StartingCash;
+            var cash = 7000;
             var cost = 500;
             var renta = 250;
+
+            var buyerIndex = 1;
+            var visitorIndex = 2;
+            var monopoly = new Monopoly().SetUpFields().SetUpPlayers(new[] { "Peter", "Ekaterina", "Alexander" }, cash);
 
             var field1 = monopoly.GetFieldByName("Ford");
             monopoly.Buy(buyerIndex, field1);
             
             var field2 = monopoly.GetFieldByName("Ford");
-            monopoly.Renta(ownerIndex, field2);
+            monopoly.Renta(visitorIndex, field2);
 
             var player1 = monopoly.GetPlayerByIndex(buyerIndex);
             player1.Cash.Should().Be(cash - cost + renta);
 
-            var player2 = monopoly.GetPlayerByIndex(ownerIndex);
+            var player2 = monopoly.GetPlayerByIndex(visitorIndex);
             player2.Cash.Should().Be(cash - renta);
         }
     }

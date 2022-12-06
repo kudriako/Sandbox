@@ -16,7 +16,7 @@
 
         public int Income { get; init; }
 
-        public int Renta { get; init; }
+        public int Charge { get; init; }
 
         public abstract bool CanBeBought();
 
